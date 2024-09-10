@@ -1,16 +1,19 @@
 <script setup>
-import { RouterLink } from 'vue-router'
-import { defineEmits } from 'vue'
 import router from '@/router'
+import { defineEmits } from 'vue'
+import { RouterLink } from 'vue-router'
+import { useCurrentUser } from 'vuefire'
 
 const emit = defineEmits(['authenticated'])
+
+const user = useCurrentUser()
 
 const logMeOut = () => {
   console.log('Logging out')
   localStorage.removeItem('isLoggedIn')
   localStorage.removeItem('userEmail')
   emit('authenticated', false)
-  router.push('/')
+  router.push('/register')
   // location.reload()
 }
 </script>
@@ -43,6 +46,9 @@ const logMeOut = () => {
           <li class="nav-item">
             <a href="#" class="nav-link" @click="logMeOut">Logout</a>
           </li>
+          <div>
+            {{ user?.email }}
+          </div>
         </ul>
       </div>
     </div>

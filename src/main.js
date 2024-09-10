@@ -10,14 +10,10 @@ import ToastService from 'primevue/toastservice'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-
+import { VueFire, VueFireAuth } from 'vuefire'
 import { initializeApp } from 'firebase/app'
 import { getAuth, connectAuthEmulator } from 'firebase/auth'
-
-if (import.meta.env.mode === 'development') {
-  const auth = getAuth()
-  connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true })
-}
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 
 /* code from our Firebase console */
 var firebaseConfig = {
@@ -30,9 +26,26 @@ var firebaseConfig = {
 }
 
 // Initialize Firebase
-initializeApp(firebaseConfig)
+const firebaseApp = initializeApp(firebaseConfig)
+
+console.log(import.meta.mode)
+// if (import.meta.env.mode === 'development') {
+console.log('connecting to emulator')
+const auth = getAuth()
+connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true })
+const firestore = getFirestore()
+connectFirestoreEmulator(firestore, 'localhost', 8080)
+// }
 
 const app = createApp(App)
+app.use(VueFire, {
+  // imported above but could also just be created here
+  firebaseApp,
+  modules: [
+    // we will see other modules later on
+    VueFireAuth()
+  ]
+})
 
 app.use(PrimeVue, {
   theme: {
