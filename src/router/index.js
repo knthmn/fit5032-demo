@@ -19,6 +19,11 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
+      path: '/messageboard',
+      name: 'messageboard',
+      component: () => import('../views/MessageBoardView.vue')
+    },
+    {
       path: '/health',
       name: 'health',
       component: MyHealthView
